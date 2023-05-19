@@ -19,8 +19,9 @@
                   { 'selected-level': levelName === selectedLevel },
                 ]"
                 @click="setSelectedLevelHandler(levelName)"
-                >Level {{ levelName }}</b-button
               >
+                  Level: {{ levelName }}
+              </b-button>
               <div
                 v-bind:class="[
                   'hide-dropdown',
@@ -113,6 +114,13 @@ export default {
       this.formatLevels();
       this.selectedLevel = "1";
     },
+    getNumberOfZombies() {
+      let zombieCount = 0;
+      for (let i = 0; i < this.tableItems.length; i++) {
+        zombieCount += this.tableItems[i][2];
+      }
+      return zombieCount;
+    },
     duplicateLevel(wave) {
       let newKey = 1;
       const newObject = {};
@@ -155,11 +163,18 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500&display=swap");
 
 #app {
-  font-family: 'Comfortaa';
-  background-image: linear-gradient(to right,#3e4936, #707c6b 25%, #3e4936 50%, #707c6b 75%, #3e4936 100%);
+  font-family: "Comfortaa";
+  background-image: linear-gradient(
+    to right,
+    #3e4936,
+    #707c6b 25%,
+    #3e4936 50%,
+    #707c6b 75%,
+    #3e4936 100%
+  );
 }
 .waves-editor-container {
   display: flex;
@@ -200,7 +215,7 @@ export default {
 }
 
 .level-button {
-  width: 120px;
+  width: 180px;
   margin: 0.2em 0 0.2em 0;
 }
 .button-container {
