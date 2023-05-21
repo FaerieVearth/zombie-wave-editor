@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- {{ wavesPlan }} -->
-    <div class="waves-editor-container">
+    <div class="waves-editor-container" :key="renderKey">
       <div class="level-selection">
         <div class="import-export">
           <b-button @click="importFile()" variant="success">Import</b-button>
@@ -20,7 +20,7 @@
                 ]"
                 @click="setSelectedLevelHandler(levelName)"
               >
-                Level: {{ levelName }}
+                {{ levelName }} / {{ getNumberOfZombies(value) }}  
               </b-button>
               <div
                 v-bind:class="[
@@ -85,10 +85,13 @@ export default {
         { key: "remove", label: "", type: "remove" },
       ],
       wavesPlan: {},
+      entireJson: {},
+      renderKey: 1,
     };
   },
   async mounted() {
-    this.wavesPlan = wavesPlanJson.game_data.waves_plan;
+    this.entireJson = wavesPlanJson;
+    this.wavesPlan = this.entireJson.game_data.waves_plan;
 /*     await this.getJsonRequest(); */
   },
   methods: {
@@ -119,10 +122,10 @@ export default {
       this.formatLevels();
       this.selectedLevel = "1";
     },
-    getNumberOfZombies() {
+    getNumberOfZombies(level) {
       let zombieCount = 0;
-      for (let i = 0; i < this.tableItems.length; i++) {
-        zombieCount += this.tableItems[i][2];
+      for (let i = 0; i < level.length; i++) {
+        zombieCount += level[i][2];
       }
       return zombieCount;
     },
@@ -154,13 +157,16 @@ export default {
       [fileHandle] = await window.showOpenFilePicker();
       const file = await fileHandle.getFile();
       const content = await file.text();
-      this.wavesPlan = JSON.parse(content).game_data.waves_plan;
+      this.entireJson = JSON.parse(content);
+      this.wavesPlan = this.entireJson.game_data.waves_plan;
+      this.renderKey +=1;
     },
     async exportFile() {
       const handle = await window.showSaveFilePicker();
       const writable = await handle.createWritable();
-      let saveObj = { waves_plan: this.wavesPlan };
-      await writable.write(JSON.stringify(saveObj.waves_plan));
+      let saveObj = { entireJson: this.entireJson };
+      saveObj.entireJson.game_data.waves_plan = this.wavesPlan;
+      await writable.write(JSON.stringify(saveObj.entireJson));
       await writable.close();
     },
   },
