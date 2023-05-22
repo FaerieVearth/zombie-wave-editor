@@ -6,6 +6,7 @@
         <div class="import-export">
           <b-button @click="importFile()" variant="success">Import</b-button>
           <b-button @click="exportFile()" variant="success">Export</b-button>
+          <b-button @click="copyToClipboard()" variant="success">Copy to Clipboard</b-button>
         </div>
         <div class="level-button-container">
           <div
@@ -20,7 +21,7 @@
                 ]"
                 @click="setSelectedLevelHandler(levelName)"
               >
-                {{ levelName }} / {{ getNumberOfZombies(value) }}  
+                {{ levelName }} / {{ getNumberOfZombies(value) }}
               </b-button>
               <div
                 v-bind:class="[
@@ -92,10 +93,10 @@ export default {
   async mounted() {
     this.entireJson = wavesPlanJson;
     this.wavesPlan = this.entireJson.game_data.waves_plan;
-/*     await this.getJsonRequest(); */
+    /*     await this.getJsonRequest(); */
   },
   methods: {
-/*     async getJsonRequest() {
+    /*     async getJsonRequest() {
       const catFactsResponse = await axios
         .get(
           "https://data.edenap.com/settings.php?app=and.z2&user_id=r32r32r32r32"
@@ -159,7 +160,7 @@ export default {
       const content = await file.text();
       this.entireJson = JSON.parse(content);
       this.wavesPlan = this.entireJson.game_data.waves_plan;
-      this.renderKey +=1;
+      this.renderKey += 1;
     },
     async exportFile() {
       const handle = await window.showSaveFilePicker();
@@ -168,6 +169,21 @@ export default {
       saveObj.entireJson.game_data.waves_plan = this.wavesPlan;
       await writable.write(JSON.stringify(saveObj.entireJson));
       await writable.close();
+    },
+    copyToClipboard() {
+      let selBox = document.createElement("textarea");
+      selBox.style.position = "fixed";
+      selBox.style.left = "0";
+      selBox.style.top = "0";
+      selBox.style.opacity = "0";
+      let saveObj = { entireJson: this.entireJson };
+      saveObj.entireJson.game_data.waves_plan = this.wavesPlan;
+      selBox.value = JSON.stringify(saveObj.entireJson);
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand("copy");
+      document.body.removeChild(selBox);
     },
   },
 };
