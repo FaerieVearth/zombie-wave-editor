@@ -92,7 +92,7 @@ export default {
   },
   async mounted() {
     this.entireJson = wavesPlanJson;
-    this.wavesPlan = this.entireJson.game_data.waves_plan;
+    this.wavesPlan = this.entireJson.waves_plan;
     /*     await this.getJsonRequest(); */
   },
   methods: {
@@ -159,14 +159,14 @@ export default {
       const file = await fileHandle.getFile();
       const content = await file.text();
       this.entireJson = JSON.parse(content);
-      this.wavesPlan = this.entireJson.game_data.waves_plan;
+      this.wavesPlan = this.entireJson.waves_plan;
       this.renderKey += 1;
     },
     async exportFile() {
       const handle = await window.showSaveFilePicker();
       const writable = await handle.createWritable();
       let saveObj = { entireJson: this.entireJson };
-      saveObj.entireJson.game_data.waves_plan = this.wavesPlan;
+      saveObj.entireJson.waves_plan = this.wavesPlan;
       await writable.write(JSON.stringify(saveObj.entireJson));
       await writable.close();
     },
@@ -177,7 +177,7 @@ export default {
       selBox.style.top = "0";
       selBox.style.opacity = "0";
       let saveObj = { entireJson: this.entireJson };
-      saveObj.entireJson.game_data.waves_plan = this.wavesPlan;
+      saveObj.entireJson.waves_plan = this.wavesPlan;
       selBox.value = JSON.stringify(saveObj.entireJson);
       document.body.appendChild(selBox);
       selBox.focus();
