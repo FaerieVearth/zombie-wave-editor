@@ -207,6 +207,7 @@ export default {
   padding-right: 10px;
   overflow-x: hidden;
   overflow-y: auto;
+  min-height: 500px;
 }
 
 .level-button-container::-webkit-scrollbar-track {
@@ -240,6 +241,10 @@ export default {
   background: #bb2d3b !important;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
+}
+
+.dropdown-icon {
+  z-index: 10;
 }
 
 .dropdown-icon button {
