@@ -7,6 +7,9 @@
           <b-button @click="importFile()" variant="success">Import</b-button>
           <b-button @click="exportFile()" variant="success">Export</b-button>
           <b-button @click="copyToClipboard()" variant="success">Copy to Clipboard</b-button>
+          <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
+            Copied to clipboard!
+          </b-alert>
         </div>
         <div class="level-button-container">
           <div
@@ -63,6 +66,7 @@
 <script>
 import EditableTable from "./components/EditableTable.vue";
 import WavePlayer from "./components/WavePlayer.vue";
+
 /* import axios from "axios"; */
 export default {
   name: "App",
@@ -87,6 +91,7 @@ export default {
       wavesPlan: {},
       entireJson: {},
       renderKey: 1,
+      showDismissibleAlert: false,
       originalText: `{
 "rewards": {
       "2": {  
@@ -949,13 +954,14 @@ export default {
       selBox.select();
       document.execCommand("copy");
       document.body.removeChild(selBox);
+      this.showDismissibleAlert = true;
     },
     myReplace(string,replacement) {
       console.log(replacement);
       replacement = replacement.substring(1, replacement.length-1);
       var result = string.match(/(?<="waves_plan": {\s+).*?(?=\s+})/gs);
       return string.replace(result, replacement);
-    }
+    },
   },
 };
 </script>
@@ -1064,5 +1070,22 @@ export default {
   flex-direction: column;
   gap: 0.2em;
   padding: 1rem;
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.alert-dismissible {
+  padding-right: 1rem !important;
+}
+
+.close {
+  border-radius: 15px;
+  width: 30px;
+  height: 30px;
+  align-self: end;
 }
 </style>
