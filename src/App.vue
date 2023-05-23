@@ -918,7 +918,6 @@ export default {
       let newKey = 1;
       const newObject = {};
       for (var key in this.wavesPlan) {
-        //console.log("Assign: " + newKey + " the value of: " + key);
         newObject[newKey] = JSON.parse(JSON.stringify(this.wavesPlan[key]));
         newKey++;
       }
@@ -957,7 +956,6 @@ export default {
       this.showDismissibleAlert = true;
     },
     myReplace(string,replacement) {
-      console.log(replacement);
       replacement = replacement.substring(1, replacement.length-1);
       var result = string.match(/(?<="waves_plan": {\s+).*?(?=\s+})/gs);
       return string.replace(result, replacement);
